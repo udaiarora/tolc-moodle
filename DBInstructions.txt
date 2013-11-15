@@ -1,0 +1,2 @@
+For Alias Name
+In the table "mdl_user" at the end of the table add the field "aliasname"
