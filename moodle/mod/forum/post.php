@@ -808,8 +808,6 @@ if ($fromform = $mform_post->get_data()) {
     }
 }
 
-
-
 // To get here they need to edit a post, and the $post
 // variable will be loaded with all the particulars,
 // so bring up the form.

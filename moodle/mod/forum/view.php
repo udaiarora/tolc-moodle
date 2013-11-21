@@ -235,4 +235,4 @@
 
     echo $OUTPUT->footer($course);
 
-
+    

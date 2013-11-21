@@ -53,7 +53,7 @@ class mod_forum_mod_form extends moodleform_mod {
         $mform->addElement('select', 'type', get_string('forumtype', 'forum'), $forumtypes);
         $mform->addHelpButton('type', 'forumtype', 'forum');
         $mform->setDefault('type', 'general');
-
+        
         // Attachments and word count.
         $mform->addElement('header', 'attachmentswordcounthdr', get_string('attachmentswordcount', 'forum'));
 

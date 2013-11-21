@@ -250,17 +250,17 @@
         $a->blockperiod = get_string('secondstotime'.$forum->blockperiod);
         echo $OUTPUT->notification(get_string('thisforumisthrottled','forum',$a));
     }
-
     if ($forum->type == 'qanda' && !has_capability('mod/forum:viewqandawithoutposting', $modcontext) &&
                 !forum_user_has_posted($forum->id,$discussion->id,$USER->id)) {
         echo $OUTPUT->notification(get_string('qandanotify','forum'));
     }
-
     if ($move == -1 and confirm_sesskey()) {
         echo $OUTPUT->notification(get_string('discussionmoved', 'forum', format_string($forum->name,true)));
     }
 
     $canrate = has_capability('mod/forum:rate', $modcontext);
+   
+    forum_print_synergic($discussion);
     forum_print_discussion($course, $cm, $forum, $discussion, $post, $displaymode, $canreply, $canrate);
 
     echo $OUTPUT->footer();

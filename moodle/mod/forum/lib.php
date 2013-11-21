@@ -2400,6 +2400,16 @@ function forum_get_firstpost_from_discussion($discussionid) {
                               AND d.firstpost = p.id ", array($discussionid));
 }
 
+function forum_get_synergic_from_discussion($discussionid) {
+    global $CFG, $DB;
+
+    return $DB->get_record_sql("SELECT synergic
+                             FROM {forum_discussions} d,
+                                  {forum_posts} p
+                            WHERE d.id = ?
+                              ", array($discussionid));
+}
+
 /**
  * Returns an array of counts of replies to each discussion
  *
@@ -3270,6 +3280,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
             return;
         }
         $output .= html_writer::tag('a', '', array('id'=>'p'.$post->id));
+        $output .= html_writer::start_tag('div', array('class'=>'forumpost clearfix'));
         $output .= html_writer::start_tag('div', array('class'=>'forumpost clearfix'));
         $output .= html_writer::start_tag('div', array('class'=>'row header'));
         $output .= html_writer::tag('div', '', array('class'=>'left picture')); // Picture
@@ -5752,6 +5763,45 @@ function forum_print_latest_discussions($course, $forum, $maxdiscussions=-1, $di
  * @param mixed $canreply
  * @param bool $canrate
  */
+function curPageURL() {
+ $pageURL = 'http';
+ if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+ $pageURL .= "://";
+ if ($_SERVER["SERVER_PORT"] != "80") {
+  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+ } else {
+  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+ }
+ return $pageURL;
+}
+function forum_print_synergic($discus)
+{   $syndiscuss=serialize($discus);
+    $output="";
+    $sy= forum_get_synergic_from_discussion($discus->id);
+    $output .= "<script>function synedit(){
+            document.getElementById('syn').removeAttribute('readonly');
+            document.getElementById('syn').style.cssText='background:#ffffff;width:100%; height: 200px; ';
+            document.getElementById('but-synedit').style.cssText='display:none;';
+            document.getElementById('but-syncancel').style.cssText='display:inline-block;';
+            document.getElementById('but-syndone').style.cssText='display:inline-block;';
+            }</script>";
+    $output .= "<div>
+                    <form action='submit_synergic.php'  method='post'>
+                        <textarea id='syn' name='syn' style='width:100%; height: 200px; background:#bebebe;' readonly>".$sy->synergic."</textarea>";
+    //"javascript:document.getElementById('."'syn'".').removeAttribute('."'readonly'".').style.cssText = '."'background:#ffffff;'".'>Edit</button><br/>';";
+    $output .= '
+                        
+                
+                        <input name="lasturl" id="lasturl" type="text" style="display:none;" value='.curPageURL().'>
+                        <textarea name="dis" id="dis" type="text" style="display:none;">'.$syndiscuss.'</textarea>
+                        <input id="but-syndone" style="display:none;" type="submit"/>
+                        <button id="but-syncancel" style="display:none;" onclick="javascript:location.reload();">Cancel</button>
+                    </form>
+                    <button id="but-synedit" onclick="synedit();">Edit</button></div><br/><br/>';
+    echo $output;
+
+}
+
 function forum_print_discussion($course, $cm, $forum, $discussion, $post, $mode, $canreply=NULL, $canrate=false) {
     global $USER, $CFG;
 
