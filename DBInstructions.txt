@@ -1,2 +1,14 @@
 For Alias Name
+Folders changed
+mod/forum
+lib/
+user/
+user/profile
+
+Database changes
 In the table "mdl_user" at the end of the table add the field "aliasname"
+In the table "mdl_forum_discussions" at the end of the table add the fields "firstalias" and "lastalias"
+In the table "mdl_forum_posts" at the end of the table add the field "alias"
+In the table "mdl_user_info_data" at the end of the table add the field "aliasname"
+
+For Synergic Answers
