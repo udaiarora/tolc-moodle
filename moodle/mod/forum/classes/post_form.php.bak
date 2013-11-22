@@ -146,7 +146,6 @@ class mod_forum_post_form extends moodleform {
         }
 
         $mform->addElement('checkbox', 'alias', 'Post as alias');
-
         if (!empty($CFG->forum_enabletimedposts) && !$post->parent && has_capability('mod/forum:viewhiddentimedposts', $coursecontext)) { // hack alert
             $mform->addElement('header', 'displayperiod', get_string('displayperiod', 'forum'));
 
