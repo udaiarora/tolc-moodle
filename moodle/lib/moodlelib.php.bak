@@ -3635,12 +3635,6 @@ function fullname($user, $override=false) {
     return $displayname;
 }
 
-function aliasname($user, $override=false) {
-    global $CFG, $SESSION;
-
-    return $user->aliasname;
-}
-
 /**
  * A centralised location for the all name fields. Returns an array / sql string snippet.
  *

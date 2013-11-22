@@ -742,14 +742,7 @@ function forum_cron() {
                 }
 
                 $smallmessagestrings = new stdClass();
-                if($post->alias) {
-                    $smallmessagestrings->user = aliasname($userfrom);
-                }
-                else
-                {
-                    $smallmessagestrings->user = fullname($userfrom);
-                }
-
+                $smallmessagestrings->user = fullname($userfrom);
                 $smallmessagestrings->forumname = "$shortname: ".format_string($forum->name,true).": ".$discussion->name;
                 $smallmessagestrings->message = $post->message;
                 //make sure strings are in message recipients language
@@ -1020,13 +1013,7 @@ function forum_cron() {
                             $posttext .= "\n";
                             $posttext .= $CFG->wwwroot.'/mod/forum/discuss.php?d='.$discussion->id;
                             $by = new stdClass();
-                            if($post->alias) {
-                                $by->name = aliasname($userfrom);
-                            }
-                            else
-                            {
-                                $by->name = fullname($userfrom);
-                            }
+                            $by->name = fullname($userfrom);
                             $by->date = userdate($post->modified);
                             $posttext .= "\n".format_string($post->subject,true).' '.get_string("bynameondate", "forum", $by);
                             $posttext .= "\n---------------------------------------------------------------------";
@@ -1139,12 +1126,7 @@ function forum_make_mail_text($course, $cm, $forum, $discussion, $post, $userfro
     }
 
     $by = New stdClass;
-    if($post->alias) {
-        $by->name = aliasname($userfrom, $viewfullnames);
-    }
-    else {
-        $by->name = fullname($userfrom, $viewfullnames);
-    }
+    $by->name = fullname($userfrom, $viewfullnames);
     $by->date = userdate($post->modified, "", $userto->timezone);
 
     $strbynameondate = get_string('bynameondate', 'forum', $by);
@@ -1586,15 +1568,9 @@ function forum_print_recent_activity($course, $viewfullnames, $timestart) {
         $subjectclass = empty($post->parent) ? ' bold' : '';
 
         echo '<li><div class="head">'.
-               '<div class="date">'.userdate($post->modified, $strftimerecent).'</div>';
-
-        if($post->alias) {
-            echo '<div class="name">'.aliasname($post, $viewfullnames).'</div>';
-        }
-        else {
-            echo '<div class="name">'.fullname($post, $viewfullnames).'</div>';
-        }
-        echo '</div>';
+               '<div class="date">'.userdate($post->modified, $strftimerecent).'</div>'.
+               '<div class="name">'.fullname($post, $viewfullnames).'</div>'.
+             '</div>';
         echo '<div class="info'.$subjectclass.'">';
         if (empty($post->parent)) {
             echo '"<a href="'.$CFG->wwwroot.'/mod/forum/discuss.php?d='.$post->discussion.'">';
@@ -3148,16 +3124,9 @@ function forum_make_mail_post($course, $cm, $forum, $discussion, $post, $userfro
     }
     $output .= '<div class="subject">'.format_string($post->subject).'</div>';
 
-    $fullname = ($post->alias)?aliasname($userfrom, $viewfullnames):fullname($userfrom, $viewfullnames);
+    $fullname = fullname($userfrom, $viewfullnames);
     $by = new stdClass();
-    if($post->alias)
-    {
-        $by->name = $fullname;
-    }
-    else {
-        $by->name = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userfrom->id.'&amp;course='.$course->id.'">'.$fullname.'</a>';
-    }
-    
+    $by->name = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userfrom->id.'&amp;course='.$course->id.'">'.$fullname.'</a>';
     $by->date = userdate($post->modified, '', $userto->timezone);
     $output .= '<div class="author">'.get_string('bynameondate', 'forum', $by).'</div>';
 
@@ -3362,13 +3331,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $postuser->picture   = $post->picture;
     $postuser->email     = $post->email;
     // Some handy things for later on
-    $alias = $post->alias;
-    if($alias) {
-        $postuser->fullname    = aliasname($postuser, $cm->cache->caps['moodle/site:viewfullnames']);
-    }
-    else {
-        $postuser->fullname    = fullname($postuser, $cm->cache->caps['moodle/site:viewfullnames']);
-    }
+    $postuser->fullname    = fullname($postuser, $cm->cache->caps['moodle/site:viewfullnames']);
     $postuser->profilelink = new moodle_url('/user/view.php', array('id'=>$post->userid, 'course'=>$course->id));
 
     // Prepare the groups the posting user belongs to
@@ -3507,12 +3470,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::tag('div', $postsubject, array('class'=>'subject'));
 
     $by = new stdClass();
-    if($post->alias) {
-        $by->name = $postuser->fullname;
-    }
-    else {
-        $by->name = html_writer::link($postuser->profilelink, $postuser->fullname);
-    }
+    $by->name = html_writer::link($postuser->profilelink, $postuser->fullname);
     $by->date = userdate($post->modified);
     $output .= html_writer::tag('div', get_string('bynameondate', 'forum', $by), array('class'=>'author'));
 
@@ -3810,20 +3768,10 @@ function forum_print_discussion_header(&$post, $forum, $group=-1, $datestring=""
     echo $OUTPUT->user_picture($postuser, array('courseid'=>$forum->course));
     echo "</td>\n";
 
-$disc = get_firstlast_alias($post);
-
-    echo '<td class="author">';
     // User name
-    if($disc->firstalias) {
-        $fullname = aliasname($postuser, has_capability('moodle/site:viewfullnames', $modcontext));
-        echo $fullname;
-    }
-    else {
-        $fullname = fullname($postuser, has_capability('moodle/site:viewfullnames', $modcontext));
-        echo '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$post->userid.'&amp;course='.$forum->course.'">'.$fullname.'</a>';
-    }
-    
-    
+    $fullname = fullname($postuser, has_capability('moodle/site:viewfullnames', $modcontext));
+    echo '<td class="author">';
+    echo '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$post->userid.'&amp;course='.$forum->course.'">'.$fullname.'</a>';
     echo "</td>\n";
 
     // Group picture
@@ -3882,16 +3830,8 @@ $disc = get_firstlast_alias($post);
         $temp = 'um' . $addname;
         $usermodified->$addname = $post->$temp;
     }
-
-    if($disc->lastalias)
-    {
-        echo aliasname($usermodified).'<br />';
-    }
-    else {
-        echo '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$post->usermodified.'&amp;course='.$forum->course.'">'.
-         fullname($usermodified).'</a><br />';   
-    }
-    
+    echo '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$post->usermodified.'&amp;course='.$forum->course.'">'.
+         fullname($usermodified).'</a><br />';
     echo '<a href="'.$CFG->wwwroot.'/mod/forum/discuss.php?d='.$post->discussion.$parenturl.'">'.
           userdate($usedate, $datestring).'</a>';
     echo "</td>\n";
@@ -4402,20 +4342,16 @@ function forum_add_new_post($post, $mform, &$message) {
     $post->mailed     = FORUM_MAILED_PENDING;
     $post->userid     = $USER->id;
     $post->attachment = "";
-    $post->alias = !empty($post->alias);
 
     $post->id = $DB->insert_record("forum_posts", $post);
     $post->message = file_save_draft_area_files($post->itemid, $context->id, 'mod_forum', 'post', $post->id,
             mod_forum_post_form::editor_options($context, null), $post->message);
     $DB->set_field('forum_posts', 'message', $post->message, array('id'=>$post->id));
-    $DB->set_field('forum_posts', 'alias', $post->alias, array('id'=>$post->id));
-
-	forum_add_attachment($post, $forum, $cm, $mform, $message);
+    forum_add_attachment($post, $forum, $cm, $mform, $message);
 
     // Update discussion modified date
     $DB->set_field("forum_discussions", "timemodified", $post->modified, array("id" => $post->discussion));
     $DB->set_field("forum_discussions", "usermodified", $post->userid, array("id" => $post->discussion));
-    $DB->set_field("forum_discussions", "lastalias", $post->alias, array("id" => $post->discussion));
 
     if (forum_tp_can_track_forums($forum) && forum_tp_is_tracked($forum)) {
         forum_tp_mark_post_read($post->userid, $post, $post->forum);
@@ -4461,12 +4397,8 @@ function forum_update_post($post, $mform, &$message) {
     $post->message = file_save_draft_area_files($post->itemid, $context->id, 'mod_forum', 'post', $post->id,
             mod_forum_post_form::editor_options($context, $post->id), $post->message);
     $DB->set_field('forum_posts', 'message', $post->message, array('id'=>$post->id));
-    $DB->set_field('forum_posts', 'alias', !empty($post->alias), array('id'=>$post->id));
 
     $DB->update_record('forum_discussions', $discussion);
-    if(!$post->parent) {
-        $DB->set_field('forum_discussions', 'firstalias', !empty($post->alias), array('id'=>$post->discussion));
-    }
 
     forum_add_attachment($post, $forum, $cm, $mform, $message);
 
@@ -4520,7 +4452,6 @@ function forum_add_discussion($discussion, $mform=null, $unused=null, $userid=nu
     $post->forum         = $forum->id;     // speedup
     $post->course        = $forum->course; // speedup
     $post->mailnow       = $discussion->mailnow;
-    $post->alias         = !empty($discussion->alias);
 
     $post->id = $DB->insert_record("forum_posts", $post);
 
@@ -4540,12 +4471,9 @@ function forum_add_discussion($discussion, $mform=null, $unused=null, $userid=nu
     $discussion->userid       = $userid;
 
     $post->discussion = $DB->insert_record("forum_discussions", $discussion);
-    $DB->set_field("forum_discussions", "firstalias", $post->alias, array("id" => $post->discussion));
-    $DB->set_field("forum_discussions", "lastalias", $post->alias, array("id" => $post->discussion));
 
     // Finally, set the pointer on the post.
     $DB->set_field("forum_posts", "discussion", $post->discussion, array("id"=>$post->id));
-    $DB->set_field('forum_posts', 'alias', $post->alias, array('id'=>$post->id));
 
     if (!empty($cm->id)) {
         forum_add_attachment($post, $forum, $cm, $mform, $unused);
@@ -4939,13 +4867,7 @@ function forum_post_subscription($post, $forum) {
     }
 
     $info = new stdClass();
-    if($post->alias) {
-        $info->name  = aliasname($USER);
-    }
-    else {
-        $info->name  = fullname($USER);
-    }
-    
+    $info->name  = fullname($USER);
     $info->forum = format_string($forum->name);
 
     switch ($action) {
@@ -5824,12 +5746,6 @@ function forum_print_latest_discussions($course, $forum, $maxdiscussions=-1, $di
 }
 
 
-function get_firstlast_alias($post) {
-    global $DB;
-    $discussion = $DB->get_record('forum_discussions', array('id'=> $post->discussion));
-    return $discussion;    
-}
-
 /**
  * Prints a forum discussion
  *
@@ -6060,13 +5976,8 @@ function forum_print_posts_threaded($course, &$cm, $forum, $discussion, $parent,
                     continue;
                 }
                 $by = new stdClass();
-                                if($post->alias) {
-                    $by->name = aliasname($post, $canviewfullnames);
-                }
-                else {
-                    $by->name = fullname($post, $canviewfullnames);
-                }
-				$by->date = userdate($post->modified);
+                $by->name = fullname($post, $canviewfullnames);
+                $by->date = userdate($post->modified);
 
                 if ($forumtracked) {
                     if (!empty($post->postread)) {
@@ -6274,12 +6185,7 @@ function forum_print_recent_mod_activity($activity, $courseid, $detail, $modname
     echo '</div>';
 
     echo '<div class="user">';
- 	    if($post->alias) {
-        $fullname = aliasname($activity->user, $viewfullnames);
-    }
-    else {
-        $fullname = fullname($activity->user, $viewfullnames);
-    }		
+    $fullname = fullname($activity->user, $viewfullnames);
     echo "<a href=\"$CFG->wwwroot/user/view.php?id={$activity->user->id}&amp;course=$courseid\">"
          ."{$fullname}</a> - ".userdate($activity->timestamp);
     echo '</div>';

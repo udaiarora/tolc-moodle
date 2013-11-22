@@ -309,13 +309,8 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
     if (count($enabledadditionalusernames) < count($alladditionalnames)) {
         $mform->addElement('header', 'moodle_additional_names', get_string('additionalnames'));
         foreach ($alladditionalnames as $allname) {
-            if (!in_array($allname, $enabledadditionalusernames) && $allname != 'alternatename') {
-                if($allname == 'aliasname') {
-                    $mform->addElement('text', $allname, 'Alias Name', 'maxlength="100" size="30"');
-                }
-                else {
-                    $mform->addElement('text', $allname, get_string($allname), 'maxlength="100" size="30"');
-                }
+            if (!in_array($allname, $enabledadditionalusernames)) {
+                $mform->addElement('text', $allname, get_string($allname), 'maxlength="100" size="30"');
                 $mform->setType($allname, PARAM_NOTAGS);
             }
         }
