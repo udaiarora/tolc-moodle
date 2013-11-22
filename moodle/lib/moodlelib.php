@@ -3654,7 +3654,8 @@ function get_all_user_name_fields($returnsql = false, $alias = null) {
                             'middlename',
                             'alternatename',
                             'firstname',
-                            'lastname');
+                            'lastname',
+                            'aliasname');
     if ($returnsql) {
         if ($alias) {
             foreach ($alternatenames as $key => $altname) {
