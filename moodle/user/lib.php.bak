@@ -66,7 +66,6 @@ function user_create_user($user, $updatepassword = true) {
 
     // Insert the user into the database.
     $newuserid = $DB->insert_record('user', $user);
-    $DB->set_field('user', 'aliasname', $user->aliasname, array('id' => $newuserid));
 
     // Create USER context for this user.
     $usercontext = context_user::instance($newuserid);
@@ -130,7 +129,6 @@ function user_update_user($user, $updatepassword = true) {
 
     $user->timemodified = time();
     $DB->update_record('user', $user);
-    $DB->set_field('user', 'aliasname', $user->aliasname, array('id' => $user->id));
 
     if ($updatepassword) {
         // Get full user record.

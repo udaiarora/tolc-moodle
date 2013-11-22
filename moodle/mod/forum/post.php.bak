@@ -576,7 +576,6 @@ $mform_post->set_data(array(        'attachments'=>$draftitemid,
                                     'userid'=>$post->userid,
                                     'parent'=>$post->parent,
                                     'discussion'=>$post->discussion,
-                                    'alias'=>!empty($post->alias),
                                     'course'=>$course->id) +
                                     $page_params +
 

@@ -164,7 +164,6 @@ if ($usernew = $userform->get_data()) {
     $usernew->timemodified = time();
     $createpassword = false;
 
-
     if ($usernew->id == -1) {
         //TODO check out if it makes sense to create account with this auth plugin and what to do with the password
         unset($usernew->id);
