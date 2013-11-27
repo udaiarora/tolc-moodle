@@ -11,6 +11,9 @@ lib/
 user/
 user/profile
 
+Sai 
+
+
 Database changes
 In the table "mdl_user" at the end of the table add the field "aliasname"
 In the table "mdl_forum_discussions" at the end of the table add the fields "firstalias" and "lastalias"
