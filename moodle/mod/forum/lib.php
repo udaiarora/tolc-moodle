@@ -5882,7 +5882,9 @@ function forum_print_synergic($discus)
                         <button id="but-syncancel" style="display:none;" onclick="javascript:location.reload();">Cancel</button>
                     </form>
                     <button id="but-synedit" onclick="synedit();">Edit</button></div><br/><br/>';
-    echo $output;
+    if(forum_tp_count_forum_posts($discus->id)>6) {
+        echo $output;
+    }
 
 }
 
