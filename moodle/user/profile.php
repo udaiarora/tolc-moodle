@@ -372,6 +372,7 @@ if (!isset($hiddenfields['mycourses'])) {
         echo html_writer::tag('dd', rtrim($courselisting,', '));
     }
 }
+
 if (!isset($hiddenfields['firstaccess'])) {
     if ($user->firstaccess) {
         $datestring = userdate($user->firstaccess)."&nbsp; (".format_time(time() - $user->firstaccess).")";
@@ -390,6 +391,8 @@ if (!isset($hiddenfields['lastaccess'])) {
     echo html_writer::tag('dt', get_string('lastaccess'));
     echo html_writer::tag('dd', $datestring);
 }
+
+echo "<br><b>Extra Credits: $user->extracredit</b><br>";
 
 /// Printing tagged interests
 if (!empty($CFG->usetags)) {

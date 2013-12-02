@@ -100,6 +100,13 @@
     $courserenderer = $PAGE->get_renderer('core', 'course');
     echo $OUTPUT->header();
 
+    $user_fornotifying = $DB->get_record("user", array("id"=>$USER->id));
+    if($user_fornotifying->extracredit != $user_fornotifying->previousextracredit)
+    {
+        echo '<p style="color:green; text-align:center; font-size:15px"><a href="http://localhost:8080/tolc-moodle/moodle/user/profile.php" style="color:green;"><b>Congratulations ! You have been awarded extra credit !!</b></a></p>';
+        $DB->set_field('user' ,'previousextracredit' , $user_fornotifying->extracredit, array('id' => $USER->id));
+    }
+
 /// Print Section or custom info
     $siteformatoptions = course_get_format($SITE)->get_format_options();
     $modinfo = get_fast_modinfo($SITE);

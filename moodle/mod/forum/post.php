@@ -25,6 +25,7 @@
 
 require_once('../../config.php');
 require_once('lib.php');
+require_once('analyzer.php');
 require_once($CFG->libdir.'/completionlib.php');
 
 $reply   = optional_param('reply', 0, PARAM_INT);
@@ -693,6 +694,26 @@ if ($fromform = $mform_post->get_data()) {
     } else if ($fromform->discussion) { // Adding a new post to an existing discussion
         // Before we add this we must check that the user will not exceed the blocking threshold.
         forum_check_blocking_threshold($thresholdwarning);
+
+        $comment = $fromform->message;
+        $comment = preg_replace('/[^A-Za-z\-]/', ' ', $comment);
+        $sentence_score = score($comment);
+
+        $parent_post = $DB->get_record("forum_posts", array("id"=>$fromform->parent));
+
+        if($parent_post->userid!=$USER->id)
+        {
+            $original_poster = $DB->get_record("user", array("id"=>$parent_post->userid));
+
+            if($sentence_score >= 15)
+            {
+                //$previous_extracredit=$original_poster->extracredit;
+                $new_extracredit=$original_poster->extracredit;
+                $new_extracredit += round($sentence_score/15);
+                //$DB->set_field('user' ,'previousextracredit' , $previous_extracredit, array('id' => $original_poster->id));
+                $DB->set_field('user' ,'extracredit' , $new_extracredit, array('id' => $original_poster->id));
+            }
+        }
 
         unset($fromform->groupid);
         $message = '';

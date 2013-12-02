@@ -9,15 +9,15 @@ $CFG->dblibrary = 'native';
 $CFG->dbhost    = 'localhost';
 $CFG->dbname    = 'moodle';
 $CFG->dbuser    = 'root';
-$CFG->dbpass    = '';
+$CFG->dbpass    = 'root';
 $CFG->prefix    = 'mdl_';
 $CFG->dboptions = array (
   'dbpersist' => 0,
-  'dbport' => '',
+  'dbport' => 3306,
   'dbsocket' => '',
 );
 
-$CFG->wwwroot   = 'http://localhost/tolc-moodle/moodle';
+$CFG->wwwroot   = 'http://localhost:8080/tolc-moodle/moodle';
 $CFG->dataroot  = 'C:\\wamp\\moodledata';
 $CFG->admin     = 'admin';
 

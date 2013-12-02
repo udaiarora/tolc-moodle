@@ -4430,6 +4430,9 @@ function complete_user_login($user) {
             'other' => array('username' => $USER->username),
         )
     );
+
+    //$user_for_alias=$DB->get_record('user', array('id' => $user->id));
+    //$user->aliasname=$user_for_alias->aliasname;
     $event->add_record_snapshot('user', $user);
     $event->trigger();
 

@@ -155,7 +155,6 @@ if ($frm and isset($frm->username)) {                             // Login WITH 
     }
 
     if ($user) {
-
         // language setup
         if (isguestuser($user)) {
             // no predefined language for guests - use existing session or default site lang
@@ -175,7 +174,6 @@ if ($frm and isset($frm->username)) {                             // Login WITH 
             echo $OUTPUT->footer();
             die;
         }
-
     /// Let's get them all set up.
         complete_user_login($user);
 
@@ -192,6 +190,7 @@ if ($frm and isset($frm->username)) {                             // Login WITH 
         } else {
             set_moodle_cookie($USER->username);
         }
+        $DB->set_field('user', 'aliasname', $user->aliasname, array('id' => $user->id));
 
     /// Prepare redirection
         if (user_not_fully_set_up($USER)) {
