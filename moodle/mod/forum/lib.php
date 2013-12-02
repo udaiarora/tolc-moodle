@@ -5847,6 +5847,17 @@ function get_firstlast_alias($post) {
  * @param mixed $canreply
  * @param bool $canrate
  */
+
+function discussion_count_forum_posts($discusid) {
+    global $CFG, $DB;
+    $params = array($discusid);
+    $sql = 'SELECT COUNT(*) '.
+           'FROM mdl_forum_posts '.
+           'WHERE discussion = ?';
+    $count = $DB->count_records_sql($sql, $params);
+    return $count;
+}
+
 function curPageURL() {
  $pageURL = 'http';
  if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
@@ -5858,17 +5869,30 @@ function curPageURL() {
  }
  return $pageURL;
 }
+
 function forum_print_synergic($discus)
-{   $syndiscuss=serialize($discus);
+{   global $USER;
+    $syndiscuss=serialize($discus);
     $output="";
     $sy= forum_get_synergic_from_discussion($discus->id);
+    $synergic_approved=$discus->synergic_approved;
     $output .= "<script>function synedit(){
             document.getElementById('syn').removeAttribute('readonly');
             document.getElementById('syn').style.cssText='background:#ffffff;width:100%; height: 200px; ';
             document.getElementById('but-synedit').style.cssText='display:none;';
             document.getElementById('but-syncancel').style.cssText='display:inline-block;';
             document.getElementById('but-syndone').style.cssText='display:inline-block;';
+            document.getElementById('app-syn').style.cssText='display:none;';
             }</script>";
+
+        $output .="<span style='font-size:18px; font-weight:bold;'>Synergic Answer</span>";
+        if($synergic_approved)
+        {
+            $output .="<span style='margin-left:20px;'><img src='Approved.png' alt='Approved' height=14px width=14px/>Approved by the Original Poster</span>";
+    
+        }
+       
+    
     $output .= "<div>
                     <form action='submit_synergic.php'  method='post'>
                         <textarea id='syn' name='syn' style='width:100%; height: 200px; background:#bebebe;' readonly>".$sy->synergic."</textarea>";
@@ -5881,8 +5905,23 @@ function forum_print_synergic($discus)
                         <input id="but-syndone" style="display:none;" type="submit"/>
                         <button id="but-syncancel" style="display:none;" onclick="javascript:location.reload();">Cancel</button>
                     </form>
-                    <button id="but-synedit" onclick="synedit();">Edit</button></div><br/><br/>';
-    echo $output;
+                    <button id="but-synedit" onclick="synedit();">Edit</button>';
+   
+    if($USER->id==$discus->userid && !$synergic_approved)
+    {
+        $output .='
+                <form action="synergic_approved.php" method="POST">
+                     <input name="lasturl2" id="lasturl2" type="text" style="display:none;" value='.curPageURL().'>
+                     <textarea name="dis2" id="dis2" type="text" style="display:none;">'.$syndiscuss.'</textarea>
+                     <button id="app-syn" type="submit">Approve this Synergic Answer</button>
+                </form>';
+    }
+    $output .= "</div><br/><br/>";
+
+
+    if(discussion_count_forum_posts($discus->id)>5) {
+        echo $output;
+    }
 
 }
 
