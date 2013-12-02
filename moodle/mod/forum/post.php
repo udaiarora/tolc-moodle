@@ -705,11 +705,11 @@ if ($fromform = $mform_post->get_data()) {
         {
             $original_poster = $DB->get_record("user", array("id"=>$parent_post->userid));
 
-            if($sentence_score >= 15)
+            if($sentence_score >= 5)
             {
                 //$previous_extracredit=$original_poster->extracredit;
                 $new_extracredit=$original_poster->extracredit;
-                $new_extracredit += round($sentence_score/15);
+                $new_extracredit += round($sentence_score/5);
                 //$DB->set_field('user' ,'previousextracredit' , $previous_extracredit, array('id' => $original_poster->id));
                 $DB->set_field('user' ,'extracredit' , $new_extracredit, array('id' => $original_poster->id));
             }
