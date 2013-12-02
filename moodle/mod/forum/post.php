@@ -704,7 +704,6 @@ if ($fromform = $mform_post->get_data()) {
         if($parent_post->userid!=$USER->id)
         {
             $original_poster = $DB->get_record("user", array("id"=>$parent_post->userid));
-
             if($sentence_score >= 15)
             {
                 //$previous_extracredit=$original_poster->extracredit;
