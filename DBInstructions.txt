@@ -3,6 +3,7 @@ mod/forum
 
 Database changes
 In the table "mdl_forum_discussions" at the end of the table add the fields "synergic"
+In the table "mdl_forum_discussions" at the end of the table add the fields "synergic_approved" with default value as 0
 
 For Alias Name
 Folders changed
