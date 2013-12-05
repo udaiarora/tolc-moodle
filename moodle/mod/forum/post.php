@@ -697,6 +697,7 @@ if ($fromform = $mform_post->get_data()) {
 
         $comment = $fromform->message;
         $comment = preg_replace('/[^A-Za-z\-]/', ' ', $comment);
+        $comment = strtolower($comment);
         $sentence_score = score($comment);
 
         $parent_post = $DB->get_record("forum_posts", array("id"=>$fromform->parent));
