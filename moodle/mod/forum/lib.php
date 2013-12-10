@@ -5903,8 +5903,8 @@ function forum_print_synergic($discus)
                         <input name="lasturl" id="lasturl" type="text" style="display:none;" value='.curPageURL().'>
                         <textarea name="dis" id="dis" type="text" style="display:none;">'.$syndiscuss.'</textarea>
                         <input id="but-syndone" style="display:none;" type="submit"/>
-                        <button id="but-syncancel" style="display:none;" onclick="javascript:location.reload();">Cancel</button>
                     </form>
+                    <button id="but-syncancel" style="display:none;" onclick="javascript:location.reload();">Cancel</button>
                     <button id="but-synedit" onclick="synedit();">Edit</button>';
    
     if($USER->id==$discus->userid && !$synergic_approved)
