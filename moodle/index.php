@@ -103,8 +103,10 @@
     $user_fornotifying = $DB->get_record("user", array("id"=>$USER->id));
     if($user_fornotifying->extracredit != $user_fornotifying->previousextracredit)
     {
-        echo '<p style="color:green; text-align:center; font-size:15px"><a href="/tolc-moodle/moodle/user/profile.php" style="color:green;"><b>Congratulations ! You have been awarded extra credit !!</b></a></p>';
-        $DB->set_field('user' ,'previousextracredit' , $user_fornotifying->extracredit, array('id' => $USER->id));
+        echo '<p style="color:green; text-align:center; font-size:15px"><a href="/tolc-moodle/moodle/mod/forum/discuss.php?d=';
+        echo $user_fornotifying->extracreditdiscussion . '&hh=' . $user_fornotifying->extracreditpost;
+        echo '#p' .$user_fornotifying->extracreditpost. '" style="color:green;"><b>Congratulations ! You have been awarded extra credit !!</b></a></p>';
+        //$DB->set_field('user' ,'previousextracredit' , $user_fornotifying->extracredit, array('id' => $USER->id));
     }
 
 /// Print Section or custom info

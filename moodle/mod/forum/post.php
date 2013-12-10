@@ -713,6 +713,8 @@ if ($fromform = $mform_post->get_data()) {
                 $new_extracredit += round($sentence_score/5);
                 //$DB->set_field('user' ,'previousextracredit' , $previous_extracredit, array('id' => $original_poster->id));
                 $DB->set_field('user' ,'extracredit' , $new_extracredit, array('id' => $original_poster->id));
+                $DB->set_field('user' ,'extracreditdiscussion' , $discussion->id, array('id' => $original_poster->id));
+                $DB->set_field('user' ,'extracreditpost' , $parent_post->id, array('id' => $original_poster->id));
             }
         }
 

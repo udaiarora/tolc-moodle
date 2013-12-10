@@ -205,6 +205,10 @@ class user_editadvanced_form extends moodleform {
             if ($DB->record_exists('user', array('username'=>$usernew->username, 'mnethostid'=>$CFG->mnet_localhost_id))) {
                 $err['username'] = get_string('usernameexists');
             }
+            //check new aliasname does not exist
+            if ($DB->record_exists('user', array('aliasname'=>$usernew->aliasname, 'mnethostid'=>$CFG->mnet_localhost_id))) {
+                $err['aliasname'] = 'Alias name already exists';
+            }
             //check allowed characters
             if ($usernew->username !== core_text::strtolower($usernew->username)) {
                 $err['username'] = get_string('usernamelowercase');
