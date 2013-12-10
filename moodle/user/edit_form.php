@@ -132,6 +132,14 @@ class user_edit_form extends moodleform {
         $usernew = (object)$usernew;
         $user    = $DB->get_record('user', array('id'=>$usernew->id));
 
+        $current_alias = $DB->get_field('user', 'aliasname',array('id'=>$usernew->id));
+
+        if($current_alias != $usernew->aliasname)
+        {
+            if($DB->record_exists('user', array('aliasname'=>$usernew->aliasname)))
+                $errors['aliasname'] = 'Alias name already exists';
+        }
+
         // validate email
         if (!isset($usernew->email)) {
             // mail not confirmed yet

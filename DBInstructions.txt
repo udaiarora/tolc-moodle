@@ -18,6 +18,7 @@ In the table "mdl_forum_discussions" at the end of the table add the fields "fir
 In the table "mdl_forum_posts" at the end of the table add the field "alias"
 In the table "mdl_user_info_data" at the end of the table add the field "aliasname"
 In the table "mdl_user" at the end of the table add the fields "previousextracredit" and "extracredit" with default value 0
+In the table "mdl_user" at the end of the table add the field "extracreditdiscussion" and "extracreditpost" both integer with default NULL
 
 
 
@@ -27,10 +28,11 @@ ADD  `synergic_approved` INT NOT NULL DEFAULT  '0',
 ADD  `firstalias` VARCHAR( 255 ) NULL ,
 ADD  `lastalias` VARCHAR( 255 ) NULL ;
 
-
 ALTER TABLE  `user` ADD  `aliasname` VARCHAR( 255 ) NULL ,
 ADD  `previousextracredit` INT NULL DEFAULT  '0',
 ADD  `extracredit` INT NULL DEFAULT  '0';
+ADD  `extracreditdiscussion` INT NULL DEFAULT NULL;
+ADD  `extracreditpost` INT NULL DEFAULT NULL;
 
 
 ALTER TABLE  `forum_posts` ADD  `alias` VARCHAR( 255 ) NULL ;

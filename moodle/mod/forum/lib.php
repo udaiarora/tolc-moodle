@@ -3565,7 +3565,12 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     }
 
     // Output the post content
-    $output .= html_writer::tag('div', $postcontent, array('class'=>'posting '.$postclass));
+    if($post->id == $discussion->highlight) {
+        $output .= html_writer::tag('div style="background-color:#67E6EC"', $postcontent, array('class'=>'posting '.$postclass));
+    }
+    else {
+        $output .= html_writer::tag('div', $postcontent, array('class'=>'posting '.$postclass));
+    }
     $output .= html_writer::end_tag('div'); // Content
     $output .= html_writer::end_tag('div'); // Content mask
     $output .= html_writer::end_tag('div'); // Row

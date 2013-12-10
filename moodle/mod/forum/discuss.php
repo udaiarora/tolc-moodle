@@ -32,6 +32,7 @@
     $move   = optional_param('move', 0, PARAM_INT);          // If set, moves this discussion to another forum
     $mark   = optional_param('mark', '', PARAM_ALPHA);       // Used for tracking read posts if user initiated.
     $postid = optional_param('postid', 0, PARAM_INT);        // Used for tracking read posts if user initiated.
+    $highlight = optional_param('hh', 0 , PARAM_INT); // Used to focus on a single discussion
 
     $url = new moodle_url('/mod/forum/discuss.php', array('d'=>$d));
     if ($parent !== 0) {
@@ -43,6 +44,7 @@
     $course = $DB->get_record('course', array('id' => $discussion->course), '*', MUST_EXIST);
     $forum = $DB->get_record('forum', array('id' => $discussion->forum), '*', MUST_EXIST);
     $cm = get_coursemodule_from_instance('forum', $forum->id, $course->id, false, MUST_EXIST);
+    $discussion->highlight = $highlight;
 
     require_course_login($course, true, $cm);
 
