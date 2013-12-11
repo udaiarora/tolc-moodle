@@ -16,7 +16,7 @@ Database Changes
 In the table "mdl_user" at the end of the table add the field "aliasname"
 In the table "mdl_forum_discussions" at the end of the table add the fields "firstalias" and "lastalias"
 In the table "mdl_forum_posts" at the end of the table add the field "alias"
-In the table "mdl_user_info_data" at the end of the table add the field "aliasname"
+In the table "mdl_user_info_field" at the end of the table add the field "aliasname"
 In the table "mdl_user" at the end of the table add the fields "previousextracredit" and "extracredit" with default value 0
 In the table "mdl_user" at the end of the table add the field "extracreditdiscussion" and "extracreditpost" both integer with default NULL
 
